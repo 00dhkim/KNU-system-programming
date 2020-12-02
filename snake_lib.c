@@ -44,12 +44,12 @@ void init_()	// 지도 설정, 뱀 위치, 먹이 위치 랜덤 설정
 	srand((int)time(NULL));
 
 	for (int i = 0; i <= MAP_SIZE; i++) {	//지도 설정
-		map[0][i] = map[i][0] = map[MAP_SIZE][i] = map[i][MAP_SIZE] = 9;
+		map[0][i] = map[i][0] = map[MAP_SIZE][i] = map[i][MAP_SIZE] = wallNum;
 	}	// ex) MAP_SIZE:100 -> 이동반경:1~99
 
 	snake[0].i = random_(1, MAP_SIZE-1);	//뱀 위치 설정
 	snake[0].j = random_(1, MAP_SIZE-1);
-	map[snake[0].i][snake[0].j] = 1;
+	map[snake[0].i][snake[0].j] = snakeNum;
 
     set_food_posit();
 }
@@ -60,9 +60,9 @@ void set_food_posit()
 		food.i = random_(1, MAP_SIZE - 1);
 		food.j = random_(1, MAP_SIZE - 1);
 
-	} while (map[food.i][food.j] != 0);
+	} while (map[food.i][food.j] != emptyNum);
 
-	map[food.i][food.j] = 2;
+	map[food.i][food.j] = foodNum;
 }
 
 /**
@@ -111,10 +111,10 @@ void what_is_direction(int direc)
 		break;
 	}
 
-	if (map[snake[0].i + di][snake[0].j + dj] == 9 || map[snake[0].i + di][snake[0].j + dj] == 1) {	// 이동할 부분이 벽 or 뱀 이라면
+	if (map[snake[0].i + di][snake[0].j + dj] == wallNum || map[snake[0].i + di][snake[0].j + dj] == wallNum) {	// 이동할 부분이 벽 or 뱀 이라면
 		death = 1;
 	}
-	else if (map[snake[0].i + di][snake[0].j + dj] == 2)
+	else if (map[snake[0].i + di][snake[0].j + dj] == foodNum)
 	{
 		length++;
 		set_food_posit();
@@ -131,11 +131,11 @@ void move_()	//snake[]도 옮겨야 하고, map[][]의 뱀 정보도 옮겨야 �
 	snake[0].i = snake[1].i + di;
 	snake[0].j = snake[1].j + dj;
 
-	map[snake[0].i][snake[0].j] = 1;
+	map[snake[0].i][snake[0].j] = snakeNum;
 	
 	if (!grow) {
-		map[snake[length].i][snake[length].j] = 0;
-		snake[length].i = snake[length].j = 0;
+		map[snake[length].i][snake[length].j] = emptyNum;
+		snake[length].i = snake[length].j = emptyNum;
 	}
 }
 
@@ -144,10 +144,10 @@ void print_map()
 	system("clear");
 	for (int i = 0; i <= MAP_SIZE; i++) {
 		for (int j = 0; j <= MAP_SIZE; j++) {
-			if (map[i][j] == 0) printf("- ");
-			else if (map[i][j] == 1) printf("@ ");
-			else if (map[i][j] == 2) printf("& ");
-			else if (map[i][j] == 9) printf("# ");
+			if (map[i][j] == emptyNum) printf("- ");
+			else if (map[i][j] == snakeNum) printf("@ ");
+			else if (map[i][j] == foodNum) printf("& ");
+			else if (map[i][j] == wallNum) printf("# ");
 			else printf("%d ", map[i][j]);
 		}
 		printf("\n");

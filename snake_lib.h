@@ -19,6 +19,10 @@ enum DirectionNumber {
     right = 0, left, down, up
 };
 
+enum MapNumber {
+    emptyNum = 0, snakeNum, foodNum, wallNum = 9
+};
+
 typedef struct pos {
     int i;
     int j;
