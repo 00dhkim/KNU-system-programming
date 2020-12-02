@@ -28,13 +28,12 @@ typedef struct pos {
     int j;
 }pos;
 
-int map[MAP_SIZE + 2][MAP_SIZE + 2] = { 0, };	// 빈공간: 0, 뱀: 1, 먹이: 2, 벽: 9
-pos snake[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 i좌표 적을거임. snake_i[0]: 머리
-//int snake_j[MAX_SNAKE_LENGTH + 2] = { 0, };	// 뱀의 j좌표, snake_j[0]: 머리
+int map[MAP_SIZE + 2][MAP_SIZE + 2] = { 0, };
+pos snake[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 좌표 적을거임. snake[0]: 머리
 int length = 1;	// 뱀의 길이, 먹이를 먹으면 +1
 int death = 0;	// 0이면 생존, 1이면 사망
-int grow = 0;	// 1이면 성장할 예정
-int di, dj;
+int grow = 0;	// 1이면 성장할 예정, 매 턴마다 초기화
+int di, dj;     // 매 턴마다 초기화
 pos food;
 
 int random_(int a, int b);
