@@ -19,14 +19,19 @@ enum DirectionNumber {
     right = 0, left, down, up
 };
 
+typedef struct pos {
+    int i;
+    int j;
+}pos;
+
 int map[MAP_SIZE + 2][MAP_SIZE + 2] = { 0, };	// 빈공간: 0, 뱀: 1, 먹이: 2, 벽: 9
-int snake_i[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 i좌표 적을거임. snake_i[0]: 머리
-int snake_j[MAX_SNAKE_LENGTH + 2] = { 0, };	// 뱀의 j좌표, snake_j[0]: 머리
+pos snake[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 i좌표 적을거임. snake_i[0]: 머리
+//int snake_j[MAX_SNAKE_LENGTH + 2] = { 0, };	// 뱀의 j좌표, snake_j[0]: 머리
 int length = 1;	// 뱀의 길이, 먹이를 먹으면 +1
 int death = 0;	// 0이면 생존, 1이면 사망
 int grow = 0;	// 1이면 성장할 예정
 int di, dj;
-int food_i, food_j;
+pos food;
 
 int random_(int a, int b);
 void set_food_posit();
