@@ -40,6 +40,7 @@ void parent_code() {
 	wait(0); // death
 	
 	puts("you dead.\nTHE END");
+	printf("your score: %d\n", length);
 	puts("register on the scoreboard.");
 	puts("1) yes");
 	puts("2) no");
