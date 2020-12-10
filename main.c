@@ -9,6 +9,7 @@ extern int di;
 extern int dj;
 extern int grow;
 extern int death;
+extern int length;
 extern int input_direction();
 extern void print_home();
 extern void init_();
@@ -18,9 +19,6 @@ extern void print_map();
 
 // 게임 실행을 담당
 void child_code() {	
-	
-	print_home();
-	init_();
 
 	while (1) {
 		print_map();
@@ -29,23 +27,47 @@ void child_code() {
 		what_is_direction(input_direction());
 
 		if (death) {	// 사망이면 종료
-			printf("death\n");
-			break;
+			exit(0);
 		}
 		
 		move_();
 	}
+}
 
+// 프로그램 전반 관리
+void parent_code() {
+	
+	wait(0); // death
+	
+	puts("you dead.\nTHE END");
+	puts("register on the scoreboard.");
+	puts("1) yes");
+	puts("2) no");
+	int num;
+	scanf("%d", &num);
+	
+	if(num != 1) {
+		puts("good bye");
+		exit(0);
+	}
+
+	// register on the scoreboard
+	FILE *fp = fopen("scoreboard.txt","a");
+	puts("input your name");
+	char name[100];
+	scanf("%s", name);
+
+	fprintf(fp, "%d %s\n", length, name);
+
+	puts("register succeed");
+	puts("good bye");
 	exit(0);
 }
 
-void parent_code() {
-	
-	wait(0);
-	puts("THIS IS THE END");
-}
-
 int main() {
+
+	print_home();
+	init_();
 
 	int pid = fork();
 
