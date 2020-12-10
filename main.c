@@ -27,7 +27,7 @@ void child_code() {
 		what_is_direction(input_direction());
 
 		if (death) {	// 사망이면 종료
-			exit(0);
+			return;
 		}
 		
 		move_();
@@ -37,19 +37,20 @@ void child_code() {
 // 프로그램 전반 관리
 void parent_code() {
 	
-	wait(0); // death
-	
 	puts("you dead.\nTHE END");
+	getchar();
+	system("clear");
 	printf("your score: %d\n", length);
 	puts("register on the scoreboard.");
 	puts("1) yes");
 	puts("2) no");
 	int num;
+	char c;
 	scanf("%d", &num);
 	
 	if(num != 1) {
 		puts("good bye");
-		exit(0);
+		return;
 	}
 
 	// register on the scoreboard
@@ -62,26 +63,18 @@ void parent_code() {
 
 	puts("register succeed");
 	puts("good bye");
-	exit(0);
+	return;
 }
+
 
 int main() {
 
 	print_home();
 	init_();
 
-	int pid = fork();
+	child_code();
 
-	switch(pid) {
-		case -1:
-			perror("fork");
-			exit(1);
-		case 0: // child
-			child_code();
-			break;
-		default: // parent
-			parent_code();
-	}
+	parent_code();
 
 	return 0;
 }
