@@ -19,7 +19,7 @@ extern void move_();
 extern void print_map();
 
 // 게임 실행을 담당
-void main_loop() {	
+void main_loop() {
 
 	while (1) {
 		alarm(5);
@@ -38,7 +38,7 @@ void main_loop() {
 	puts("you dead.");
 }
 
-// 프로그램 전반 관리
+// 프로그램 종료 처리
 void program_exit() {
 
 	signal(SIGINT, SIG_IGN); // Ctrl-C 눌러도 무시
