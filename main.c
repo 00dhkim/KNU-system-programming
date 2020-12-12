@@ -107,8 +107,13 @@ int main() {
 	int mode; // 1: single, 2: multi
 	
 	mode = print_home();
+
+	if(mode == 2) {
+		puts("multi mode is not implemented");
+		exit(0);
+	}
+
 	init_();
-	
 	signal(SIGINT, give_up);
 	signal(SIGALRM, times_up);
 
