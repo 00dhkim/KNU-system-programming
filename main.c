@@ -12,7 +12,7 @@ extern int grow;
 extern int death;
 extern int length;
 extern int input_direction();
-extern void print_home();
+extern int print_home();
 extern void init_();
 extern void what_is_direction(int direc);
 extern void move_();
@@ -45,12 +45,13 @@ void program_exit() {
 	signal(SIGALRM, SIG_IGN); // 5초동안 아무것도 안해도 무시
 	
 	puts("GAME OVER, press enter");
-	getchar();
+	while(getchar() != '\n');
 	system("clear");
 	printf("your score: %d\n", length);
 	puts("register on the scoreboard.");
 	puts("1) yes");
 	puts("2) no");
+	putchar('>');
 	int num;
 	scanf("%d", &num);
 	
@@ -79,6 +80,7 @@ void give_up(int signum) {
 	puts("You really want to give up?");
 	puts("1) yes");
 	puts("2) no");
+	putchar('>');
 	int num;
 	scanf("%d", &num);
 	if(num == 1) program_exit();
@@ -95,11 +97,12 @@ void times_up(int signum) {
 
 int main() {
 
-	signal(SIGINT, give_up);
-	signal(SIGALRM, times_up);
 
 	print_home();
 	init_();
+	
+	signal(SIGINT, give_up);
+	signal(SIGALRM, times_up);
 
 	alarm(5); // 5초 후 SIGALRM 발생
 	main_loop();

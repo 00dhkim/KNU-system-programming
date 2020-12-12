@@ -38,13 +38,14 @@ pos food;
 
 int random_(int a, int b);
 void set_food_posit();
-void print_home();
+int print_home();
 void init_();
 void set_food_posit();
 int input_direction();
 void what_is_direction(int direc);
 void move_();
 void print_map();
+void show_scoreboard();
 
 
 #endif /* SNAKE_LIB_H */

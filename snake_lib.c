@@ -1,11 +1,10 @@
 #include "snake_lib.h"
 
-
 int random_(int a, int b) {
 	return (long long)rand()*(b - a + 1) / RAND_MAX + a;
 }
 
-void print_home()
+int print_home()
 {
 	char logo[] = 
 "          _____                    _____                    _____                    _____                    _____          \n\
@@ -34,9 +33,44 @@ void print_home()
 	puts(logo);
 
 	puts("===============================================================================");
+	puts("");
+
+	int num;
+	
+	while(1) {
+		puts("select menu");
+		puts("1) start single game");
+		puts("2) start multi game");
+		puts("3) show score board");
+		puts("4) game exit");
+		putchar('>');
+		scanf("%d", &num);
+		getchar(); // '\n' 비우기
+
+		switch(num) {
+			case 1:
+				return 1;
+				break;
+
+			case 2:
+				return 2;
+				break;
+
+			case 3:
+				show_scoreboard();
+				break;
+
+			case 4:
+				puts("good bye");
+				exit(0);
+
+				break;
+		}
+	}
+
 	puts("move: WASD, snake: @, food: &, wall: #\n");
 	puts("press enter to start");
-	getchar();
+	while(getchar() != '\n'); // fflush(stdin);
 }
 
 void init_()	// 지도 설정, 뱀 위치, 먹이 위치 랜덤 설정
@@ -157,3 +191,18 @@ void print_map()
 	printf("snake length: %d\n", length);
 }
 
+void show_scoreboard() {
+	
+	FILE *fp = fopen("scoreboard.txt","r");
+	
+	int score;
+	char name[200];
+
+	puts("<< scoreboard >>");
+
+	while(-1 != fscanf(fp, "%d%s", &score, name)) {
+		printf("%d %s\n", score, name);
+	}
+
+	puts("\n==================\n");
+}
