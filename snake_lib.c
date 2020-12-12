@@ -108,7 +108,7 @@ int input_direction()	//방향 입력후 리턴
 	char direc;
 	while(1) {
 		direc = getchar();
-		getchar(); // '\n' 지우기
+		while(getchar() != '\n'); // '\n' 지우기
 
 		switch (direc)
 		{
