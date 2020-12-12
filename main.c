@@ -40,6 +40,9 @@ void main_loop() {
 
 // 프로그램 전반 관리
 void program_exit() {
+
+	signal(SIGINT, SIG_IGN); // Ctrl-C 눌러도 무시
+	signal(SIGALRM, SIG_IGN); // 5초동안 아무것도 안해도 무시
 	
 	puts("GAME OVER, press enter");
 	getchar();
