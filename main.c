@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <curses.h>
 #include <unistd.h>
+#include <curses.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 
 extern int di;
@@ -18,26 +19,29 @@ extern void move_();
 extern void print_map();
 
 // 게임 실행을 담당
-void child_code() {	
+void main_loop() {	
 
 	while (1) {
+		alarm(5);
 		print_map();
 
 		di = dj = grow = 0;
 		what_is_direction(input_direction());
 
-		if (death) {	// 사망이면 종료
+		if (death) { // 사망이면 종료
 			return;
 		}
 		
 		move_();
 	}
+
+	puts("you dead.");
 }
 
 // 프로그램 전반 관리
-void parent_code() {
+void program_exit() {
 	
-	puts("you dead.\nTHE END");
+	puts("GAME OVER, press enter");
 	getchar();
 	system("clear");
 	printf("your score: %d\n", length);
@@ -45,7 +49,6 @@ void parent_code() {
 	puts("1) yes");
 	puts("2) no");
 	int num;
-	char c;
 	scanf("%d", &num);
 	
 	if(num != 1) {
@@ -66,15 +69,37 @@ void parent_code() {
 	return;
 }
 
+// Ctrl-C 입력 시 포기 선언
+void give_up(int signum) {
+
+	puts("You really want to give up?");
+	puts("1) yes");
+	puts("2) no");
+	int num;
+	scanf("%d", &num);
+	if(num == 1) program_exit();
+}
+
+// 입력 시간 초과, program_exit() 호출하고 종료
+void times_up(int signum) {
+	
+	puts("input times up");
+	program_exit();
+	exit(0);
+}
 
 int main() {
+
+	signal(SIGINT, give_up);
+	signal(SIGALRM, times_up);
 
 	print_home();
 	init_();
 
-	child_code();
+	alarm(5); // 5초 후 SIGALRM 발생
+	main_loop();
 
-	parent_code();
+	program_exit();
 
 	return 0;
 }
