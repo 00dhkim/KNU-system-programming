@@ -56,7 +56,7 @@ void program_exit() {
 	
 	if(num != 1) {
 		puts("good bye");
-		return;
+		exit(0);
 	}
 
 	// register on the scoreboard
@@ -69,18 +69,20 @@ void program_exit() {
 
 	puts("register succeed");
 	puts("good bye");
-	return;
+	exit(0);
 }
 
 // Ctrl-C 입력 시 포기 선언
 void give_up(int signum) {
 
+	alarm(0);
 	puts("You really want to give up?");
 	puts("1) yes");
 	puts("2) no");
 	int num;
 	scanf("%d", &num);
 	if(num == 1) program_exit();
+	else print_map();
 }
 
 // 입력 시간 초과, program_exit() 호출하고 종료
