@@ -4,6 +4,7 @@
 #include <curses.h>
 #include <sys/wait.h>
 #include <signal.h>
+#include <time.h>
 
 
 extern int di;
@@ -66,7 +67,13 @@ void program_exit() {
 	char name[100];
 	scanf("%s", name);
 
-	fprintf(fp, "%d %s\n", length, name);
+	// time
+	char timebuf[30];
+	time_t t = time(NULL);
+	struct tm* tm_info = localtime(&t);
+	strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info);
+
+	fprintf(fp, "%3d %20s %s\n", length, name, timebuf);
 
 	puts("register succeed");
 	puts("good bye");
@@ -97,8 +104,9 @@ void times_up(int signum) {
 
 int main() {
 
-
-	print_home();
+	int mode; // 1: single, 2: multi
+	
+	mode = print_home();
 	init_();
 	
 	signal(SIGINT, give_up);

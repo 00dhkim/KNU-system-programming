@@ -4,6 +4,7 @@ int random_(int a, int b) {
 	return (long long)rand()*(b - a + 1) / RAND_MAX + a;
 }
 
+// return 1: single, 2: multi
 int print_home()
 {
 	char logo[] = 
@@ -107,6 +108,7 @@ int input_direction()	//방향 입력후 리턴
 	char direc;
 	while(1) {
 		direc = getchar();
+		getchar(); // '\n' 지우기
 
 		switch (direc)
 		{
@@ -196,13 +198,15 @@ void show_scoreboard() {
 	FILE *fp = fopen("scoreboard.txt","r");
 	
 	int score;
-	char name[200];
+	char name[200], datebuf[20], timebuf[20];
 
-	puts("<< scoreboard >>");
+	puts("\n<< scoreboard >>\n");
 
-	while(-1 != fscanf(fp, "%d%s", &score, name)) {
-		printf("%d %s\n", score, name);
+	while(-1 != fscanf(fp, "%d%s%s%s", &score, name, datebuf, timebuf)) {
+		printf("%3d %10s %s %s\n", score, name, datebuf, timebuf);
 	}
 
 	puts("\n==================\n");
+	puts("press enter to continue");
+	while(getchar() != '\n');
 }
