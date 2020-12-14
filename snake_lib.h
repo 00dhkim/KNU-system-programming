@@ -20,7 +20,7 @@ enum DirectionNumber {
 };
 
 enum MapNumber {
-    emptyNum = 0, snakeNum, foodNum, wallNum = 9
+    emptyNum = 0, snakeNum, foodNum, wallNum = 9, snakeEnemyNum = 4
 };
 
 typedef struct pos {
