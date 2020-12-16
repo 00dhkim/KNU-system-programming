@@ -47,7 +47,7 @@ void set_food_posit();
 int input_direction();
 void what_is_direction(int direc, int user);
 void move_(int user);
-void print_map();
+void print_map(int mode, int user);
 void show_scoreboard();
 void single_main_function();
 void program_exit(int mode);

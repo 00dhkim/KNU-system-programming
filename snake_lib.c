@@ -155,7 +155,9 @@ void what_is_direction(int direc, int user)
 		break;
 	}
 	if(user == 1) {
-		if (map[snake1[0].i + di][snake1[0].j + dj] == wallNum || map[snake1[0].i + di][snake1[0].j + dj] == wallNum) {	// 이동할 부분이 벽 or 뱀 이라면
+		if (map[snake1[0].i + di][snake1[0].j + dj] == wallNum \
+		 || map[snake1[0].i + di][snake1[0].j + dj] == snake1Num \
+		 || map[snake1[0].i + di][snake1[0].j + dj] == snake2Num) {	// 이동할 부분이 벽 or 뱀 이라면
 			death1 = 1;
 		}
 		else if (map[snake1[0].i + di][snake1[0].j + dj] == foodNum)
@@ -166,7 +168,9 @@ void what_is_direction(int direc, int user)
 		}
 	}
 	else {
-		if (map[snake2[0].i + di][snake2[0].j + dj] == wallNum || map[snake2[0].i + di][snake2[0].j + dj] == wallNum) {	// 이동할 부분이 벽 or 뱀 이라면
+		if (map[snake2[0].i + di][snake2[0].j + dj] == wallNum \
+		 || map[snake2[0].i + di][snake2[0].j + dj] == snake1Num \
+		 || map[snake2[0].i + di][snake2[0].j + dj] == snake2Num) {	// 이동할 부분이 벽 or 뱀 이라면
 			death2 = 1;
 		}
 		else if (map[snake2[0].i + di][snake2[0].j + dj] == foodNum)
@@ -212,20 +216,22 @@ void move_(int user)	//snake1[]도 옮겨야 하고, map[][]의 뱀 정보도 �
 	}
 }
 
-void print_map(int mode)
+void print_map(int mode, int user)
 {
 	system("clear");
 	for (int i = 0; i <= MAP_SIZE; i++) {
 		for (int j = 0; j <= MAP_SIZE; j++) {
 			if (map[i][j] == emptyNum) printf("- ");
 			else if (map[i][j] == snake1Num) printf("@ ");
-			else if (map[i][j] == snake2Num) printf("* ");
+			else if (map[i][j] == snake2Num) printf("● ");
 			else if (map[i][j] == foodNum) printf("& ");
 			else if (map[i][j] == wallNum) printf("# ");
 			else printf("%d ", map[i][j]);
 		}
 		printf("\n");
 	}
+
+	if(user) printf("player %d's turn\n", user);
 
 	printf("\nsnake1 position: (%d, %d)\n", snake1[0].i, snake1[0].j);	//snake1 position
 	if(mode == 2) printf(  "snake2 position: (%d, %d)\n", snake2[0].i, snake2[0].j);	//snake2 position
@@ -257,7 +263,7 @@ void single_main_function() {
 
 	while (1) {
 		alarm(5);
-		print_map(1);
+		print_map(1, 1);
 
 		di = dj = grow = 0;
 		what_is_direction(input_direction(), 1);
@@ -270,6 +276,37 @@ void single_main_function() {
 	}
 
 	puts("you dead.");
+}
+
+void multi_main_function() {
+
+	while(1) {
+		alarm(5);
+		print_map(2, 1);
+
+		di = dj = grow = 0;
+		what_is_direction(input_direction(), 1);
+
+		if(death1) {
+			return;
+		}
+
+		move_(1);
+
+		/////////////////////////////////////
+
+		alarm(5);
+		print_map(2, 2);
+
+		di = dj = grow = 0;
+		what_is_direction(input_direction(), 2);
+
+		if(death2) {
+			return;
+		}
+
+		move_(2);
+	}
 }
 
 // 프로그램 종료 처리
@@ -287,7 +324,8 @@ void program_exit(int mode) {
 	if(mode == 2) {
 
 		if(death1) puts("player 2 is winner.");
-		else puts("player 1 is winner.");
+		else if (death2) puts("player 1 is winner.");
+		else puts("draw");
 
 		printf("player 1's score: %d\n", length1);
 		printf("player 1's score: %d\n", length2);
