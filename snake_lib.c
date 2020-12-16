@@ -222,9 +222,9 @@ void print_map(int mode, int user)
 	for (int i = 0; i <= MAP_SIZE; i++) {
 		for (int j = 0; j <= MAP_SIZE; j++) {
 			if (map[i][j] == emptyNum) printf("- ");
-			else if (map[i][j] == snake1Num) printf("@ ");
-			else if (map[i][j] == snake2Num) printf("● ");
-			else if (map[i][j] == foodNum) printf("& ");
+			else if (map[i][j] == snake1Num) printf(user == 1 ? (RED "@ " RESET) : "@ ");
+			else if (map[i][j] == snake2Num) printf(user == 2 ? (RED "● " RESET) : "● ");
+			else if (map[i][j] == foodNum) printf(YEL "& " RESET);
 			else if (map[i][j] == wallNum) printf("# ");
 			else printf("%d ", map[i][j]);
 		}

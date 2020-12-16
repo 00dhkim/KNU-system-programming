@@ -17,7 +17,7 @@ extern int print_home();
 extern void init_(int mode);
 extern void what_is_direction(int direc, int user);
 extern void move_(int user);
-void print_map(int mode, int user);
+extern void print_map(int mode, int user);
 extern void single_main_function();
 extern void program_exit(int mode);
 extern void multi_main_function();
