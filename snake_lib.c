@@ -92,6 +92,16 @@ void init_(int mode)
 		snake2[0].i = random_(1, MAP_SIZE-1);
 		snake2[0].j = random_(1, MAP_SIZE-1);
 		map[snake2[0].i][snake2[0].j] = snake2Num;
+
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
+		set_food_posit();
 	}
 
     set_food_posit();
@@ -221,9 +231,9 @@ void print_map(int mode, int user)
 	system("clear");
 	for (int i = 0; i <= MAP_SIZE; i++) {
 		for (int j = 0; j <= MAP_SIZE; j++) {
-			if (map[i][j] == emptyNum) printf("- ");
+			if (map[i][j] == emptyNum) printf("· ");
 			else if (map[i][j] == snake1Num) printf(user == 1 ? (RED "@ " RESET) : "@ ");
-			else if (map[i][j] == snake2Num) printf(user == 2 ? (RED "● " RESET) : "● ");
+			else if (map[i][j] == snake2Num) printf(user == 2 ? (RED "♥ " RESET) : "♥ ");
 			else if (map[i][j] == foodNum) printf(YEL "& " RESET);
 			else if (map[i][j] == wallNum) printf("# ");
 			else printf("%d ", map[i][j]);
