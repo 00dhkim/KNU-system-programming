@@ -22,7 +22,7 @@ enum DirectionNumber {
 };
 
 enum MapNumber {
-    emptyNum = 0, snakeNum, foodNum, wallNum = 9, snakeEnemyNum = 4
+    emptyNum = 0, snake1Num, foodNum, wallNum = 9, snake2Num = 4
 };
 
 typedef struct pos {
@@ -31,9 +31,10 @@ typedef struct pos {
 }pos;
 
 int map[MAP_SIZE + 2][MAP_SIZE + 2] = { 0, };
-pos snake[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 좌표 적을거임. snake[0]: 머리
-int length = 1;	// 뱀의 길이, 먹이를 먹으면 +1
-int death = 0;	// 0이면 생존, 1이면 사망
+pos snake1[MAX_SNAKE_LENGTH + 2] = { 0, };	// 여기에 뱀의 각 부위의 좌표 적을거임. snake1[0]: 머리
+pos snake2[MAX_SNAKE_LENGTH + 2] = { 0, };
+int length1 = 1, length2 = 1;	// 뱀의 길이, 먹이를 먹으면 +1
+int death1 = 0, death2 = 0;	// 0이면 생존, 1이면 사망
 int grow = 0;	// 1이면 성장할 예정, 매 턴마다 초기화
 int di, dj;     // 매 턴마다 초기화
 pos food;
@@ -44,10 +45,12 @@ int print_home();
 void init_(int mode);
 void set_food_posit();
 int input_direction();
-void what_is_direction(int direc);
-void move_();
+void what_is_direction(int direc, int user);
+void move_(int user);
 void print_map();
 void show_scoreboard();
+void single_main_function();
+void program_exit(int mode);
 
 
 #endif /* SNAKE_LIB_H */
