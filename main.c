@@ -25,7 +25,7 @@ extern void multi_main_function();
 int mode; // 1: single, 2: multi
 
 // Ctrl-C 입력 시 포기 선언
-void give_up(int signum) {
+void give_up() {
 
 	alarm(0);
 	puts("You really want to give up?");
@@ -39,7 +39,7 @@ void give_up(int signum) {
 }
 
 // 입력 시간 초과, program_exit() 호출하고 종료
-void times_up(int signum) {
+void times_up() {
 	
 	puts("input times up");
 	program_exit(mode);
