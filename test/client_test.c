@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
 
     // step 3: main procedure
 
+    FILE *sock_fp = fdopen(sock_fd, "w");
+
     while(1) {
         messlen = read(sock_id, message, BUFSIZ);
         if(messlen == -1) oops("read");        
@@ -52,7 +54,7 @@ int main(int argc, char *argv[]) {
         if(!strncmp(message, "bye", 3)) break;
     }
     close(sock_id);
-    puts("ended");
+    puts("\nended");
 
     return 0;
 }

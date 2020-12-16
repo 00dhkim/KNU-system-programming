@@ -73,29 +73,27 @@ int main(int argc, char *argv[]) {
         oops("listen");
     }
 
-    // main loop
+    // main procedure
     
     int pid;
 
-    while(1) {
-        
-        sock_fd = accept(sock_id, NULL, NULL);
-        puts("client connected");
-        
-        pid = fork();
+    sock_fd = accept(sock_id, NULL, NULL);
+    puts("client connected");
+    
+    pid = fork();
 
-        switch(pid) {
-            case -1:
-                perror("fork");
-                exit(1);
-            
-            case 0: // child
-                child_procedure(sock_id, sock_fd);
-                exit(0);
-            
-            //default:
-                // pass
-        }
+    switch(pid) {
+        case -1:
+            perror("fork");
+            exit(1);
+        
+        case 0: // child
+            child_procedure(sock_id, sock_fd);
+            exit(0);
+        
+        //default:
+            // pass
     }
+    
 }
 

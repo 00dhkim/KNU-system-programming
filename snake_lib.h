@@ -10,6 +10,8 @@
 #include <termio.h>
 #include <curses.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <signal.h>
 
 
 #define MAP_SIZE 20
@@ -39,7 +41,7 @@ pos food;
 int random_(int a, int b);
 void set_food_posit();
 int print_home();
-void init_();
+void init_(int mode);
 void set_food_posit();
 int input_direction();
 void what_is_direction(int direc);

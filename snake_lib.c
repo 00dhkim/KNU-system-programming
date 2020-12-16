@@ -74,7 +74,9 @@ int print_home()
 	while(getchar() != '\n'); // fflush(stdin);
 }
 
-void init_()	// 지도 설정, 뱀 위치, 먹이 위치 랜덤 설정
+// 지도 설정, 뱀 위치, 먹이 위치 랜덤 설정
+// input: 1이면 single, 2이면 multi
+void init_(int mode)
 {
 	srand((int)time(NULL));
 
@@ -210,3 +212,67 @@ void show_scoreboard() {
 	puts("press enter to continue");
 	while(getchar() != '\n');
 }
+
+// 게임 실행을 담당
+void single_main_function() {
+
+	while (1) {
+		alarm(5);
+		print_map();
+
+		di = dj = grow = 0;
+		what_is_direction(input_direction());
+
+		if (death) { // 사망이면 종료
+			return;
+		}
+		
+		move_();
+	}
+
+	puts("you dead.");
+}
+
+// 프로그램 종료 처리
+void program_exit() {
+
+	signal(SIGINT, SIG_IGN); // Ctrl-C 눌러도 무시
+	signal(SIGALRM, SIG_IGN); // 5초동안 아무것도 안해도 무시
+	
+	puts("\n######################\n");
+	puts("GAME OVER, press enter\n");
+	puts("######################\n");
+	while(getchar() != '\n');
+	system("clear");
+	printf("your score: %d\n", length);
+	puts("register on the scoreboard.");
+	puts("1) yes");
+	puts("2) no");
+	putchar('>');
+	int num;
+	scanf("%d", &num);
+	
+	if(num != 1) {
+		puts("good bye");
+		exit(0);
+	}
+
+	// register on the scoreboard
+	FILE *fp = fopen("scoreboard.txt","a");
+	puts("input your name");
+	char name[100];
+	scanf("%s", name);
+
+	// time
+	char timebuf[30];
+	time_t t = time(NULL);
+	struct tm* tm_info = localtime(&t);
+	strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info);
+
+	fprintf(fp, "%3d %20s %s\n", length, name, timebuf);
+
+	puts("register succeed");
+	puts("good bye");
+	exit(0);
+}
+
