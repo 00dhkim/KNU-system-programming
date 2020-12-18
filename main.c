@@ -6,28 +6,20 @@
 #include <signal.h>
 #include <time.h>
 
-
-extern int di;
-extern int dj;
-extern int grow;
-extern int death;
-extern int length;
-extern int input_direction();
-extern int print_home();
+// snake_lib.c의 함수를 사용하기 위해 extern으로 끌어옴
 extern void init_(int mode);
-extern void what_is_direction(int direc, int user);
-extern void move_(int user);
+extern int print_home();
 extern void print_map(int mode, int user);
 extern void single_main_function();
-extern void program_exit(int mode);
 extern void multi_main_function();
+extern void program_exit(int mode);
 
 int mode; // 1: single, 2: multi
 
 // Ctrl-C 입력 시 포기 선언
 void give_up() {
 
-	alarm(0);
+	alarm(0); // alarm 종료
 	puts("You really want to give up?");
 	puts("1) yes");
 	puts("2) no");
@@ -51,10 +43,10 @@ int main() {
 	mode = print_home();
 
 	init_(mode);
-	signal(SIGINT, give_up);
-	signal(SIGALRM, times_up);
+	signal(SIGINT, give_up); // REQ: 필수3
+	signal(SIGALRM, times_up); // REQ: 필수2
 
-	alarm(5); // 5초 후 SIGALRM 발생
+	alarm(5); // REQ: 필수2, 5초 후 SIGALRM 발생
 	
 	if(mode == 1) single_main_function();
 	else multi_main_function();
