@@ -363,22 +363,66 @@ void program_exit(int mode) {
 		exit(0);
 	}
 
-	// register on the scoreboard
-	FILE *fp = fopen("scoreboard.txt","a");
-	puts("input your name");
-	char name[100];
-	scanf("%s", name);
+	// mutli-process 처리
+	// length1 값만 child에서 parent로 보내주기
 
-	// time
-	char timebuf[30];
-	time_t t = time(NULL);
-	struct tm* tm_info = localtime(&t);
-	strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info);
+	int pipefd[2];
+	char buf[BUFSIZ];
 
-	fprintf(fp, "%3d %20s %s\n", length1, name, timebuf);
+	if(pipe(pipefd) == -1) {
+		perror("cannot get a pipe");
+		exit(1);
+	}
 
-	puts("register succeed");
-	puts("good bye");
-	exit(0);
+	switch(fork()) {
+		case -1:
+			perror("cannot fork");
+			exit(2);
+
+			break;
+		
+		case 0: // child: write
+
+			close(pipefd[0]); // 3번(in) close
+
+			sprintf(buf, "%d", length1);
+			if(strlen(buf) != write(pipefd[1], buf, strlen(buf))) {
+				perror("write");
+				exit(3);
+			}
+
+			break;
+
+		default: // parent: read
+
+			close(pipefd[1]); // 4번(out) close
+
+			read(pipefd[0], buf, BUFSIZ);
+			int score;
+			sscanf(buf, "%d", &score);
+
+			// register on the scoreboard
+			FILE *fp = fopen("scoreboard.txt","a");
+			puts("input your name");
+			char name[100];
+			scanf("%s", name);
+
+			// time
+			char timebuf[30];
+			time_t t = time(NULL);
+			struct tm* tm_info = localtime(&t);
+			strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info);
+
+			fprintf(fp, "%3d %20s %s\n", score, name, timebuf);
+
+			puts("register succeed");
+			puts("good bye");
+			exit(0);
+
+			break;
+	}
+
+
+	
 }
 
