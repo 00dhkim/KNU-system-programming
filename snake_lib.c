@@ -277,7 +277,7 @@ void show_scoreboard() {
 void single_main_function() {
 
 	while (1) {
-		alarm(5);
+		alarm(5); // REQ: 필수2
 		print_map(1, 1);
 
 		di = dj = grow = 0;
@@ -369,12 +369,12 @@ void program_exit(int mode) {
 	int pipefd[2];
 	char buf[BUFSIZ];
 
-	if(pipe(pipefd) == -1) {
+	if(pipe(pipefd) == -1) { // REQ: 옵션1
 		perror("cannot get a pipe");
 		exit(1);
 	}
 
-	switch(fork()) {
+	switch(fork()) { // REQ: 필수4
 		case -1:
 			perror("cannot fork");
 			exit(2);
