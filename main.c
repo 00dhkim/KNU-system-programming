@@ -1,3 +1,11 @@
+/**
+ * @file main.c
+ * @author Dohyun Kim (00dh.kim@gmail.com)
+ * @brief main source code for snake project
+ * @version 0.1
+ * @date 2020-12-18
+ * 
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

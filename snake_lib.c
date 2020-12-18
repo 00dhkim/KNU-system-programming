@@ -1,10 +1,23 @@
+/**
+ * @file snake_lib.c
+ * @author Dohyun Kim (00dh.kim@gmail.com)
+ * @brief library source code for snake project
+ * @version 0.1
+ * @date 2020-12-18
+ * 
+ */
 #include "snake_lib.h"
 
+// a ~ b 범위의 랜덤 값 리턴
 int random_(int a, int b) {
 	return (long long)rand()*(b - a + 1) / RAND_MAX + a;
 }
 
-// return 1: single, 2: multi
+
+/**
+ * @brief 처음 프로그램 실행하면 나타나는 화면
+ * @return int, 1: single, 2: multi
+ */
 int print_home()
 {
 	char logo[] = 
@@ -38,7 +51,7 @@ int print_home()
 
 	puts("2020-2 system programming (prof. snowflower)");
 	puts("author: Dohyun Kim (2019112920)");
-	puts("last edited date: 2020.12.16.(Wed)");
+	puts("last edited date: 2020.12.18.(Fri)");
 	puts("\n");
 
 	int num;
@@ -79,17 +92,22 @@ int print_home()
 	while(getchar() != '\n'); // fflush(stdin);
 }
 
-// 지도 설정, 뱀 위치, 먹이 위치 랜덤 설정
-// input: 1이면 single, 2이면 multi
+/**
+ * @brief map[][] 초기값 설정, 뱀 위치랑 먹이 위치 랜덤 설정.
+ * multi 모드이면 먹이 10개 설정
+ * @param mode 1이면 single, 2이면 mutli
+ */
 void init_(int mode)
 {
 	srand((int)time(NULL));
 
-	for (int i = 0; i <= MAP_SIZE; i++) {	//지도 설정
+	// map[][] 초기값 설정
+	for (int i = 0; i <= MAP_SIZE; i++) {
 		map[0][i] = map[i][0] = map[MAP_SIZE][i] = map[i][MAP_SIZE] = wallNum;
 	}	// ex) MAP_SIZE:100 -> 이동반경:1~99
 
-	snake1[0].i = random_(1, MAP_SIZE-1);	//뱀 위치 설정
+	// 뱀 위치 설정
+	snake1[0].i = random_(1, MAP_SIZE-1);
 	snake1[0].j = random_(1, MAP_SIZE-1);
 	map[snake1[0].i][snake1[0].j] = snake1Num;
 
@@ -112,8 +130,13 @@ void init_(int mode)
     set_food_posit();
 }
 
+/**
+ * @brief Set the food position in map[][]
+ * 
+ */
 void set_food_posit()
 {
+	// 먹이 두고 싶은 위치가 이미 다른 객체가 있다면 재도전
 	do {
 		food.i = random_(1, MAP_SIZE - 1);
 		food.j = random_(1, MAP_SIZE - 1);
@@ -124,7 +147,9 @@ void set_food_posit()
 }
 
 /**
- * getchar() and return direction number
+ * @brief getchar() 수행
+ * 
+ * @return direction number
  */
 int input_direction()	//방향 입력후 리턴
 {
@@ -150,7 +175,10 @@ int input_direction()	//방향 입력후 리턴
 }
 
 /**
- * direction number를 해석하고, di와 dj를 설정
+ * @brief direction number를 해석하고, di와 dj를 설정
+ * 
+ * @param direc direction number
+ * @param user 유저의 번호, 1번인지 2번인지
  */
 void what_is_direction(int direc, int user)
 {
@@ -175,7 +203,7 @@ void what_is_direction(int direc, int user)
 		 || map[snake1[0].i + di][snake1[0].j + dj] == snake2Num) {	// 이동할 부분이 벽 or 뱀 이라면
 			death1 = 1;
 		}
-		else if (map[snake1[0].i + di][snake1[0].j + dj] == foodNum)
+		else if (map[snake1[0].i + di][snake1[0].j + dj] == foodNum) // 이동할 부분이 먹이라면
 		{
 			length1++;
 			set_food_posit();
@@ -188,7 +216,7 @@ void what_is_direction(int direc, int user)
 		 || map[snake2[0].i + di][snake2[0].j + dj] == snake2Num) {	// 이동할 부분이 벽 or 뱀 이라면
 			death2 = 1;
 		}
-		else if (map[snake2[0].i + di][snake2[0].j + dj] == foodNum)
+		else if (map[snake2[0].i + di][snake2[0].j + dj] == foodNum) // 이동할 부분이 먹이라면
 		{
 			length2++;
 			set_food_posit();
@@ -197,7 +225,13 @@ void what_is_direction(int direc, int user)
 	}
 }
 
-void move_(int user)	//snake1[]도 옮겨야 하고, map[][]의 뱀 정보도 옮겨야 함
+
+/**
+ * @brief snake[] 옮기고, map[][]의 뱀 정보도 옮김
+ * 
+ * @param user 사용자 번호, 1번인지 2번인지
+ */
+void move_(int user)
 {
 	if(user == 1) {
 		for (int i = length1-1; i >= 0; i--) {
@@ -214,7 +248,7 @@ void move_(int user)	//snake1[]도 옮겨야 하고, map[][]의 뱀 정보도 �
 			snake1[length1].i = snake1[length1].j = emptyNum;
 		}
 	}
-	else {
+	else { // user == 2
 		for (int i = length2-1; i >= 0; i--) {
 			snake2[i + 1].i = snake2[i].i;
 			snake2[i + 1].j = snake2[i].j;
@@ -228,9 +262,15 @@ void move_(int user)	//snake1[]도 옮겨야 하고, map[][]의 뱀 정보도 �
 			map[snake2[length2].i][snake2[length2].j] = emptyNum;
 			snake2[length2].i = snake2[length2].j = emptyNum;
 		}
-	}
+	} // END if user == 2
 }
 
+/**
+ * @brief 지도를 stdin으로 출력, 각종 로그도 stdin으로 함께 출력
+ * 
+ * @param mode 1: single, 2: multi
+ * @param user 현재 턴의 사용자 번호(1 또는 2), 0이면 누구의 턴인지 신경쓰지 않음
+ */
 void print_map(int mode, int user)
 {
 	system("clear");
@@ -246,6 +286,7 @@ void print_map(int mode, int user)
 		printf("\n");
 	}
 
+	// 각종 로그들
 	if(user) printf("player %d's turn\n", user);
 
 	printf("\nsnake1 position: (%d, %d)\n", snake1[0].i, snake1[0].j);	//snake1 position
@@ -255,6 +296,10 @@ void print_map(int mode, int user)
 	if(mode == 2) printf(  "  snake2 length: %d\n", length2);
 }
 
+/**
+ * @brief scoreboard.txt 파일을 읽어서 화면에 이쁘게 출력
+ * 
+ */
 void show_scoreboard() {
 	
 	FILE *fp = fopen("scoreboard.txt","r");
@@ -273,7 +318,11 @@ void show_scoreboard() {
 	while(getchar() != '\n');
 }
 
-// 게임 실행을 담당
+
+/**
+ * @brief 게임 실행을 담당 (싱글모드)
+ * 
+ */
 void single_main_function() {
 
 	while (1) {
@@ -293,6 +342,10 @@ void single_main_function() {
 	puts("you dead.");
 }
 
+/**
+ * @brief 게임 실행을 담당 (멀티 모드)
+ * 
+ */
 void multi_main_function() {
 
 	while(1) {
@@ -308,7 +361,9 @@ void multi_main_function() {
 
 		move_(1);
 
+		// player 1's turn END
 		/////////////////////////////////////
+		// player 2's turn START
 
 		alarm(5);
 		print_map(2, 2);
@@ -381,7 +436,7 @@ void program_exit(int mode) {
 
 			break;
 		
-		case 0: // child: write
+		case 0: // child: write only
 
 			close(pipefd[0]); // 3번(in) close
 
@@ -393,7 +448,7 @@ void program_exit(int mode) {
 
 			break;
 
-		default: // parent: read
+		default: // parent: read only
 
 			close(pipefd[1]); // 4번(out) close
 
@@ -407,11 +462,11 @@ void program_exit(int mode) {
 			char name[100];
 			scanf("%s", name);
 
-			// time
+			// time 처리
 			char timebuf[30];
 			time_t t = time(NULL);
 			struct tm* tm_info = localtime(&t);
-			strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info);
+			strftime(timebuf, 30, "%Y-%m-%d %H:%M ", tm_info); // 형식에 맞게
 
 			fprintf(fp, "%3d %20s %s\n", score, name, timebuf);
 
